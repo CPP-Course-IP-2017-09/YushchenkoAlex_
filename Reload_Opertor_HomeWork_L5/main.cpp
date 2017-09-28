@@ -4,20 +4,18 @@ using namespace std;
 
 int main()
 {
-    Array iArray_1(10);
-    //cout << iArray_1.ShowTheSize() << endl;
-    //iArray_1.ShowTheArray();
+    Array iArray_1(5);
     iArray_1.fillArrayRand();
     iArray_1.ShowTheArray();
-    iArray_1 = iArray_1+10;
-    iArray_1.ShowTheArray();
-    iArray_1 = iArray_1;
 
+    Array iArray_2(10);
+    iArray_2.fillArrayRand();
+    iArray_2+20;
+    iArray_2.ShowTheArray();
 
+    Array iArray_3;
+    iArray_3 = iArray_1+iArray_2;
+    iArray_3.ShowTheArray();
 
-
-
-
-    cout << "Hello World!" << endl;
     return 0;
 }

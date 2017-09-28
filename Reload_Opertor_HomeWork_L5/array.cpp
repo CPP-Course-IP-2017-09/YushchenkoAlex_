@@ -18,7 +18,7 @@ Array::Array(int sizeArr)
 Array::Array(Array & dArr)
 {
     cout << "copy constructor  ====>  " << this << endl;
-    sizeArray = dArr.ShowTheSize();
+    sizeArray = dArr.getSize();
     dataArray = new int[sizeArray];
     for (int i = 0; i < sizeArray; ++i) {
         dataArray[i] = dArr.dataArray[i];
@@ -31,12 +31,11 @@ Array::~Array()
     delete [] dataArray;
 }
 
-int Array::ShowTheSize()
+int Array::getSize()
 {
     //cout << "This metod return size of array " << sizeArray << " " << endl;
     return sizeArray;
 }
-
 void Array::ShowTheArray()
 {
     if (sizeArray == 0) {
@@ -50,7 +49,6 @@ void Array::ShowTheArray()
         cout << "end of array" << endl;
     }
 }
-
 void Array::fillArrayRand()
 {
     if (sizeArray == 0) {
@@ -63,16 +61,37 @@ void Array::fillArrayRand()
     }
 }
 
-Array Array::operator+(int x)
+Array & Array::operator+(const int x)
 {
-    Array Temp(*this);
+
     cout << " We in operator + "<< endl;
     for (int i = 0; i < sizeArray; ++i) {
-        Temp.dataArray[i] = Temp.dataArray[i]+x;
+        dataArray[i] = dataArray[i]+x;
+        cout << "+";
+    }
+    return *this;
+}
+
+Array Array::operator+(const Array &dArr)
+{
+    Array Temp(*this);
+    cout << " We in operator Arr+Arr "<< endl;
+    delete [] dataArray;
+    int firstArr = Temp.sizeArray;
+    int secondArr = dArr.sizeArray;
+    sizeArray = firstArr + secondArr;
+    dataArray = new int[firstArr+secondArr];
+    for (int i = 0; i < firstArr; ++i) {
+        dataArray[i] = Temp.dataArray[i];
+        cout << "+";
+    }
+     cout << endl;
+    for (int i = 0; i < secondArr; ++i) {
+        dataArray[i+firstArr] = dArr.dataArray[i];
         cout << "+";
     }
     cout << endl;
-    return Temp;
+    return *this;
 }
 
 Array Array::operator=(const Array &dArr)
