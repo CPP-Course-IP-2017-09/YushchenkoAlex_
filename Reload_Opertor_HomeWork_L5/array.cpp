@@ -4,7 +4,7 @@ Array::Array(int sizeArr)
 {
     sizeArray = sizeArr;
     dataArray = new int[sizeArray];
-    cout << "constructor of array " << this <<
+    cout << "constructor of array   ====>  " << this <<
             "  size of array is "<< sizeArray  << endl;
     if (sizeArray != 0) {
         // initializing all element by 0
@@ -17,25 +17,23 @@ Array::Array(int sizeArr)
 
 Array::Array(Array & dArr)
 {
-    cout << "copy constructor  " << endl;
+    cout << "copy constructor  ====>  " << this << endl;
     sizeArray = dArr.ShowTheSize();
     dataArray = new int[sizeArray];
-    for (int i = 0; i < sizeArray; i++) {
+    for (int i = 0; i < sizeArray; ++i) {
         dataArray[i] = dArr.dataArray[i];
     }
 }
 
 Array::~Array()
 {
-    cout << "destructor !!!!" << this << "this is spartaaaaaa )))" << endl;
-    //delete [] dataArray;
-
-
+    cout << "destructor !!!!    ====>  " << this << endl;
+    delete [] dataArray;
 }
 
 int Array::ShowTheSize()
 {
-    cout << "This metod return size of array " << sizeArray << " " << endl;
+    //cout << "This metod return size of array " << sizeArray << " " << endl;
     return sizeArray;
 }
 
@@ -68,11 +66,28 @@ void Array::fillArrayRand()
 Array Array::operator+(int x)
 {
     Array Temp(*this);
-    cout << "We in operator + "<< endl;
+    cout << " We in operator + "<< endl;
     for (int i = 0; i < sizeArray; ++i) {
         Temp.dataArray[i] = Temp.dataArray[i]+x;
         cout << "+";
     }
     cout << endl;
     return Temp;
+}
+
+Array Array::operator=(const Array &dArr)
+{
+    if (this != &dArr) {
+        cout << " reload operator = " << endl;
+        delete[] dataArray;
+        sizeArray = dArr.sizeArray;
+        dataArray = new int[sizeArray];
+        for (int i = 0; i < sizeArray; i++) {
+            dataArray[i] = dArr.dataArray[i];
+        }
+    }
+    else {
+        cout << " self reloading " << endl;
+    }
+    return *this;
 }

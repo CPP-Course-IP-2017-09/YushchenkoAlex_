@@ -16,7 +16,7 @@ public:
 
     // reload the operator + where if 'our class + int' whill for each element add a int
     Array operator+(int x);
-    /*Array operator+(int x);*/
+    Array operator=(const Array & dArr);
 };
 
 #endif // ARRAY_H
