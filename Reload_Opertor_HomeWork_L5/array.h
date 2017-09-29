@@ -8,7 +8,7 @@ class Array
     int sizeArray; // size of array
 public:
     Array(int sizeArray = 0); // constructor
-    Array(Array & dArr); // copy constructor
+    Array(const Array & dArr); // copy constructor
     ~Array();
     int getSize();
     void ShowTheArray();
@@ -17,7 +17,7 @@ public:
     // reload the operator + where if 'our class + int' whill for each element add a int
     Array &operator+(const int x);
     Array operator+(const Array &dArr);
-    Array operator=(const Array &dArr);
+    Array &operator=(const Array &dArr);
 };
 
 #endif // ARRAY_H

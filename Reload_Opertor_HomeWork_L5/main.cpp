@@ -14,7 +14,7 @@ int main()
     iArray_2.ShowTheArray();
 
     Array iArray_3;
-    iArray_3 = iArray_1+iArray_2;
+    iArray_3 = iArray_1+iArray_2 + iArray_1;
     iArray_3.ShowTheArray();
 
     return 0;
