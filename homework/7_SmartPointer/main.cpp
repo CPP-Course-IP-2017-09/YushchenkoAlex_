@@ -1,5 +1,7 @@
 #include <iostream>
-#include "SmartPointer.hpp"
+#include <SmartPointer.h>
+#include "line.h"
+#include "point.h"
 #include "Array.h"
 
 #define ARRAY_SIZE 10
