@@ -5,7 +5,7 @@
 #define TEST_OFF
 
 #ifdef TEST_ON
-//#define BACKUP_WITH_CHECK_TEST
+#define BACKUP_WITH_CHECK_TEST
 
 #define Test(parameter) parameter
 #endif

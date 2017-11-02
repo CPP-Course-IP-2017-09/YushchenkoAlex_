@@ -12,7 +12,7 @@ protected:
 
 public:
     GeneralBackup(const char *sFileName);        //constructor
-    ~GeneralBackup();                             //destructor
+    virtual ~GeneralBackup();                    //destructor
 
 //getFuncctions()
     unsigned int getBytes();                   //return size of backup

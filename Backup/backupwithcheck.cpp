@@ -10,13 +10,13 @@
 //constructor
 BackupWithCheck::BackupWithCheck(const char * sFileName):Backup(sFileName)
 {
-Test(std::cout<<this<<" BackupWithCheck() "<<" m_pVoid: "<<m_pVoid<<" m_nBytes: "<<m_nBytes<<" sFileName: "<<m_sFileName<<std::endl;);
+                                                                                                                                                                                                                                                                                               Test(std::cout<<this<<" BackupWithCheck() "<<" m_pVoid: "<<m_pVoid<<" m_nBytes: "<<m_nBytes<<" sFileName: "<<m_sFileName<<std::endl;);
 }
 
 //destructor
 BackupWithCheck::~BackupWithCheck()
 {
-Test(std::cout<<this<<" ~BackupWithCheck()"<<std::endl;);
+                                                                                                                                                                                                                                                                                                Test(std::cout<<this<<" ~BackupWithCheck()"<<std::endl;);
 }
 
 

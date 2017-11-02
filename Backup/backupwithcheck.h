@@ -7,7 +7,7 @@ class BackupWithCheck: public Backup
 {
 public:
     BackupWithCheck(const char * sFileName);            //constructor
-    ~BackupWithCheck();                                 //destructor
+    virtual ~BackupWithCheck();                                 //destructor
 
 
 // read() & write() functions

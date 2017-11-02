@@ -11,7 +11,7 @@ protected:
 
 public:
     Backup(const char * sFileName);             //constructor
-    ~Backup();                                  //destructor
+    virtual ~Backup();                                  //destructor
 
 // read() & write() functions
     bool read(void * pV, unsigned int *p_nBytes);       //read backup, return errno error code
