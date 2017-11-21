@@ -1,0 +1,80 @@
+#ifdef LIN_PROG
+    #include <sys/types.h>
+    #include <sys/socket.h>
+    #include <netinet/in.h>
+    #include <netdb.h>
+    #include <arpa/inet.h>
+    #include <unistd.h>
+
+    #define SOCKET int
+    #define SOCKADDR_IN sockaddr_in
+    #define INVALID_SOCKET -1
+    #define SOCKET_ERROR -1
+    #define closesocket(a)  ::close(a);
+    #define CONST_CHAR
+#endif
+
+#include <vector>
+#include <thread>
+
+#define PORT 4321
+
+ SOCKET m_AcceptSock, m_WorkSock, m_ClientSock;
+    SOCKADDR_IN m_sin;
+
+//////////////////////////
+ m_AcceptSock = socket(AF_INET, SOCK_STREAM, 0);
+
+ char sNull[sizeof(SOCKADDR_IN)] = {0};
+        memcpy(&m_sin, sNull, sizeof(SOCKADDR_IN));
+ m_sin.sin_family = AF_INET;
+        m_sin.sin_port = htons((unsigned short)PORT);
+
+#ifdef WIN_PROG
+    m_sin.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
+#endif
+#ifdef LIN_PROG
+    m_sin.sin_addr.s_addr = htonl(INADDR_ANY);
+#endif
+
+        if (bind(m_AcceptSock, (sockaddr*)&m_sin, sizeof(m_sin)) == SOCKET_ERROR)
+            throw sErrText + "Cannot bind socket";
+
+        if (listen(m_AcceptSock, SOMAXCONN) == SOCKET_ERROR)
+            throw sErrText + "Cannot enter listen mode";
+
+ std::thread th(ThAcceptFunc, this);
+    th.detach();
+
+SOCKADDR_IN resAddr;
+        //socklen_t nAddrLen = sizeof(sockaddr);
+        socklen_t nAddrLen = sizeof(SOCKADDR_IN);
+        SOCKET WorkSock = accept(pMWnd->m_AcceptSock,(sockaddr*) &resAddr, &nAddrLen);
+        
+ ThreadData * pThreadData = new ThreadData(pMWnd, WorkSock, ++pMWnd->m_iConnSeqNum);
+        std::thread th(ThPerClientFunc, pThreadData);
+        th.detach();
+
+///////////////////////////////////////  CLIENT
+ m_ClientSock = socket(AF_INET, SOCK_STREAM, 0);
+ QString sIP = ui->lineEdit_IP->text();
+    std::string str = sIP.toStdString();
+    char * pStr = (char *)str.c_str(); 
+
+SOCKADDR_IN sin;// = {AF_INET};
+    char sNull[sizeof(SOCKADDR_IN)] = {0};
+    memcpy(&sin, sNull, sizeof(SOCKADDR_IN));
+    sin.sin_family = AF_INET;
+    sin.sin_port = htons((unsigned short)PORT);
+#ifdef WIN_PROG
+    sin.sin_addr.S_un.S_addr = inet_addr(pStr);
+#endif
+#ifdef LIN_PROG
+    sin.sin_addr.s_addr = inet_addr(pStr);
+#endif
+    if(::connect(m_ClientSock, (sockaddr*)&sin, sizeof(sin)) == SOCKET_ERROR)
+    {
+        QMessageBox mess(QMessageBox::Critical, "ERROR","Cannot connect socket");
+        mess.exec();
+        return;
+    }

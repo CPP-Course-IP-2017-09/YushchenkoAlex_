@@ -1,0 +1,91 @@
+//
+
+#define WIN_PROG
+//#define LIN_PROG
+#ifdef WIN_PROG
+    #include <winsock2.h>
+    #include <windows.h>    
+#endif
+#ifdef LIN_PROG
+    #include <sys/types.h>
+    #include <sys/socket.h>
+    #include <netinet/in.h>
+    #include <netdb.h>
+    #include <arpa/inet.h>
+    #include <unistd.h>
+#endif
+
+/*client*/
+/////////////////////////////////////////
+    m_ClientSock = socket(AF_INET, SOCK_STREAM, 0);
+    QString sErrText;
+    if (INVALID_SOCKET == m_ClientSock)
+    {
+       sErrText = socket_err();
+        // ///////////
+        QMessageBox mess(QMessageBox::Critical, "Cannot create socket! ",
+                         sErrText);
+        mess.exec();
+        ui->radioButton_Client->setChecked(false);
+        return;
+    }
+
+    QString sIP = ui->lineEdit_IP->text();
+    std::string str = sIP.toStdString();
+    char * pStr = (char *)str.c_str();   
+
+    SOCKADDR_IN sin;// = {AF_INET};
+    char sNull[sizeof(SOCKADDR_IN)] = {0};
+    memcpy(&sin, sNull, sizeof(SOCKADDR_IN));
+    sin.sin_family = AF_INET;
+    sin.sin_port = htons((unsigned short)PORT);
+#ifdef WIN_PROG
+    sin.sin_addr.S_un.S_addr = inet_addr(pStr);
+#endif
+#ifdef LIN_PROG
+    sin.sin_addr.s_addr = inet_addr(pStr);
+#endif
+    if(::connect(m_ClientSock, (sockaddr*)&sin, sizeof(sin)) == SOCKET_ERROR)
+    {
+        QMessageBox mess(QMessageBox::Critical, "ERROR","Cannot connect socket");
+        mess.exec();
+        return;
+    }
+
+/*server*/
+/////////////////////////////////////////
+    SOCKADDR_IN m_sin;
+    m_AcceptSock = socket(AF_INET, SOCK_STREAM, 0);
+    QString sErrText = "";
+       
+       if (INVALID_SOCKET == m_AcceptSock)
+        {
+            sErrText = socket_err();
+            throw  sErrText + "Cannot create socket";
+        }
+
+        char sNull[sizeof(SOCKADDR_IN)] = {0};
+        memcpy(&m_sin, sNull, sizeof(SOCKADDR_IN));
+        m_sin.sin_family = AF_INET;
+        m_sin.sin_port = htons((unsigned short)PORT);
+
+#ifdef WIN_PROG
+    m_sin.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
+#endif
+#ifdef LIN_PROG
+    m_sin.sin_addr.s_addr = htonl(INADDR_ANY);
+#endif
+
+        if (bind(m_AcceptSock, (sockaddr*)&m_sin, sizeof(m_sin)) == SOCKET_ERROR)
+            throw sErrText + "Cannot bind socket";
+
+        if (listen(m_AcceptSock, SOMAXCONN) == SOCKET_ERROR)
+            throw sErrText + "Cannot enter listen mode";
+
+        ui->statusBar->showMessage("SERVER: is waiting for connection ");
+
+        m_WorkSock = accept(m_AcceptSock,(sockaddr*)&m_sin, NULL);
+
+        if (m_WorkSock == INVALID_SOCKET)
+            throw "Cannot accept socket";
+
